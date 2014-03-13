@@ -32,7 +32,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', function (req,res) {
 	res.json( {
-		messsage : "Welcome!"
+		messsage : "Damn it Sourabh, create a landing page already!!"
 	});
 });
 app.get('/cs398vl/mp/:num', mprouter.renderMP);
