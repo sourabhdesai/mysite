@@ -1,0 +1,542 @@
+{
+	"name": "root",
+	"children": [
+		{
+			"name": "not",
+			"children": [
+				{
+					"name": "not"
+				},
+				{
+					"name": "non"
+				}
+			]
+		},
+		{
+			"name": "she"
+		},
+		{
+			"name": "so",
+			"children": [
+				{
+					"name": "indeed"
+				},
+				{
+					"name": "so"
+				},
+				{
+					"name": "therefore"
+				},
+				{
+					"name": "hence"
+				},
+				{
+					"name": "thence",
+					"children": [
+						{
+							"name": "therefrom"
+						}
+					]
+				},
+				{
+					"name": "thus"
+				},
+				{
+					"name": "then"
+				},
+				{
+					"name": "sol"
+				}
+			]
+		},
+		{
+			"name": "sir",
+			"children": [
+				{
+					"name": "Sir"
+				},
+				{
+					"name": "sir"
+				}
+			]
+		},
+		{
+			"name": "one",
+			"children": [
+				{
+					"name": "one"
+				},
+				{
+					"name": "1"
+				},
+				{
+					"name": "I"
+				},
+				{
+					"name": "single",
+					"children": [
+						{
+							"name": "exclusive"
+						},
+						{
+							"name": "individual",
+							"children": [
+								{
+									"name": "private"
+								},
+								{
+									"name": "person"
+								},
+								{
+									"name": "someone"
+								},
+								{
+									"name": "somebody"
+								},
+								{
+									"name": "mortal"
+								},
+								{
+									"name": "soul"
+								}
+							]
+						},
+						{
+							"name": "unmarried"
+						}
+					]
+				},
+				{
+					"name": "unity",
+					"children": [
+						{
+							"name": "integrity"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "king",
+			"children": [
+				{
+					"name": "king"
+				},
+				{
+					"name": "King"
+				},
+				{
+					"name": "baron"
+				},
+				{
+					"name": "power",
+					"children": [
+						{
+							"name": "might"
+						},
+						{
+							"name": "force",
+							"children": [
+								{
+									"name": "storm"
+								},
+								{
+									"name": "drive"
+								},
+								{
+									"name": "ram"
+								},
+								{
+									"name": "wedge"
+								},
+								{
+									"name": "thrust"
+								},
+								{
+									"name": "push"
+								},
+								{
+									"name": "pressure"
+								},
+								{
+									"name": "strength"
+								}
+							]
+						},
+						{
+							"name": "office",
+							"children": [
+								{
+									"name": "position"
+								},
+								{
+									"name": "post"
+								},
+								{
+									"name": "berth"
+								},
+								{
+									"name": "spot"
+								},
+								{
+									"name": "place"
+								},
+								{
+									"name": "situation"
+								},
+								{
+									"name": "role"
+								},
+								{
+									"name": "authority"
+								}
+							]
+						},
+						{
+							"name": "ability"
+						}
+					]
+				},
+				{
+					"name": "queen",
+					"children": [
+						{
+							"name": "fairy"
+						},
+						{
+							"name": "queer",
+							"children": [
+								{
+									"name": "gay"
+								},
+								{
+									"name": "curious"
+								},
+								{
+									"name": "funny"
+								},
+								{
+									"name": "odd"
+								},
+								{
+									"name": "peculiar"
+								},
+								{
+									"name": "peril"
+								},
+								{
+									"name": "thwart"
+								},
+								{
+									"name": "spoil"
+								},
+								{
+									"name": "cross"
+								},
+								{
+									"name": "baffle"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Rex"
+				}
+			]
+		},
+		{
+			"name": "lancelot",
+			"children": [
+				{
+					"name": "Lancelot"
+				}
+			]
+		},
+		{
+			"name": "will",
+			"children": [
+				{
+					"name": "will"
+				},
+				{
+					"name": "leave",
+					"children": [
+						{
+							"name": "forget",
+							"children": [
+								{
+									"name": "block"
+								},
+								{
+									"name": "bury"
+								}
+							]
+						},
+						{
+							"name": "give",
+							"children": [
+								{
+									"name": "yield"
+								},
+								{
+									"name": "afford"
+								},
+								{
+									"name": "open"
+								},
+								{
+									"name": "collapse"
+								},
+								{
+									"name": "break"
+								},
+								{
+									"name": "founder"
+								},
+								{
+									"name": "feed"
+								},
+								{
+									"name": "apply"
+								},
+								{
+									"name": "commit"
+								},
+								{
+									"name": "devote"
+								},
+								{
+									"name": "hand"
+								},
+								{
+									"name": "reach"
+								},
+								{
+									"name": "sacrifice"
+								},
+								{
+									"name": "establish"
+								},
+								{
+									"name": "return"
+								},
+								{
+									"name": "pay"
+								},
+								{
+									"name": "gift"
+								},
+								{
+									"name": "present"
+								},
+								{
+									"name": "throw"
+								},
+								{
+									"name": "hold"
+								},
+								{
+									"name": "have"
+								},
+								{
+									"name": "make"
+								},
+								{
+									"name": "spring"
+								}
+							]
+						},
+						{
+							"name": "depart",
+							"children": [
+								{
+									"name": "start"
+								},
+								{
+									"name": "vary"
+								},
+								{
+									"name": "go"
+								}
+							]
+						},
+						{
+							"name": "result",
+							"children": [
+								{
+									"name": "solution"
+								},
+								{
+									"name": "answer"
+								},
+								{
+									"name": "consequence"
+								},
+								{
+									"name": "effect"
+								},
+								{
+									"name": "event"
+								},
+								{
+									"name": "issue"
+								},
+								{
+									"name": "upshot"
+								}
+							]
+						},
+						{
+							"name": "lead",
+							"children": [
+								{
+									"name": "moderate"
+								},
+								{
+									"name": "chair"
+								},
+								{
+									"name": "run"
+								},
+								{
+									"name": "conduct"
+								},
+								{
+									"name": "direct"
+								},
+								{
+									"name": "top"
+								},
+								{
+									"name": "head"
+								},
+								{
+									"name": "take"
+								},
+								{
+									"name": "guide"
+								},
+								{
+									"name": "leading"
+								},
+								{
+									"name": "leash"
+								},
+								{
+									"name": "tip"
+								},
+								{
+									"name": "wind"
+								},
+								{
+									"name": "hint"
+								},
+								{
+									"name": "star"
+								},
+								{
+									"name": "track"
+								}
+							]
+						},
+						{
+							"name": "allow",
+							"children": [
+								{
+									"name": "admit"
+								},
+								{
+									"name": "appropriate"
+								},
+								{
+									"name": "grant"
+								},
+								{
+									"name": "let"
+								},
+								{
+									"name": "countenance"
+								}
+							]
+						},
+						{
+							"name": "provide",
+							"children": [
+								{
+									"name": "offer"
+								},
+								{
+									"name": "supply"
+								},
+								{
+									"name": "ply"
+								},
+								{
+									"name": "render"
+								}
+							]
+						},
+						{
+							"name": "exit",
+							"children": [
+								{
+									"name": "die"
+								},
+								{
+									"name": "perish"
+								},
+								{
+									"name": "pass"
+								},
+								{
+									"name": "choke"
+								},
+								{
+									"name": "croak"
+								},
+								{
+									"name": "passing"
+								},
+								{
+									"name": "loss"
+								},
+								{
+									"name": "going"
+								},
+								{
+									"name": "outlet"
+								}
+							]
+						},
+						{
+							"name": "farewell"
+						},
+						{
+							"name": "parting",
+							"children": [
+								{
+									"name": "part"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "when"
+		},
+		{
+			"name": "no",
+			"children": [
+				{
+					"name": "no"
+				},
+				{
+					"name": "No"
+				}
+			]
+		}
+	]
+}

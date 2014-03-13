@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node {
+  font: 10px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+</style>
+
+<head>
+  <title>MP 2</title>
+</head>
+<body width=1000 height = 1000>
+<h1>MP 2 : Hierarchichal Structures</h1>
+<h4>
+  This is a radial tree that represents the relations between words used in the book "Once and Future King".
+  <br><br>
+  The tree starts with a sentinel node labeled "root" in the center of the circle and branches outwards to the ten most common words in the corpus. From these ten words, I used Wordnet to find all synonyms to each word that was also used in the corpus. This was recursively repeated on for three levels of iteration. I could have gone longer but would have sacrificed the cleanliness of the tree.
+  <br><br>
+  To extract this data, I did not use the NLTK library. I decided I wanted to try out the Natural Module for Node.js. This module has a lot of similair features as NLTK. It has tokenization, porter stemming, stopwords removal, word distance calculation, phonetical analysis, and complete a complete WordNet interface. It also made sense to use Javascript in the Natural Language analysis as I was dealing with JSON data right from the beginning so it was a much smoother transition to get the data into the format I wanted.
+  <br><br>
+  The biggest problem I had was in the fact that I had unintentionally made asynchronous calls. I was trying to access the data before it was done processing and there was no clear way of telling when it would be done. My HORRIBLE solution was to use a delay funcion to delay retrieving my data for a set period of time after which my data would undoubtedly be finished processing.
+  <br><br>
+  I enjoyed using this library as I know Javascript better than Python and now know a powerful tool I can use in Node.js applications. You can view the code for this site at: https://github.com/sourabhdesai/CS-398-VL-MP2 The code for the NLP analysis is in the "MP2_NodeApp" directory which can be found from the root directory
+  <br><br><br>
+</h4>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var diameter = 960;
+
+var tree = d3.layout.tree()
+    .size([360, diameter / 2 - 120])
+    .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+
+var diagonal = d3.svg.diagonal.radial()
+    .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", diameter)
+    .attr("height", diameter + 150)
+    .append("g")
+    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+
+d3.json("data", function(root) {
+  console.log(root);
+  var nodes = tree.nodes(root),
+      links = tree.links(nodes);
+      // console.log(nodes);
+
+  var link = svg.selectAll(".link")
+      .data(links)
+      .enter().append("path")
+      .attr("class", "link")
+      .attr("d", diagonal);
+
+  var node = svg.selectAll(".node")
+      .data(nodes)
+      .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+
+  node.append("circle")
+      .attr("r", 4.5);
+
+  node.append("text")
+      .attr("dy", ".31em")
+      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+      .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
+      .text(function(d) { return d.name; });
+});
+
+d3.select(self.frameElement).style("height", diameter - 150 + "px");
+
+</script>
