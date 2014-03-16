@@ -2,11 +2,12 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var http = require('http');
-var path = require('path');
+var express      = require('express');
+var http         = require('http');
+var path         = require('path');
 
-var mprouter = require('./mprouter');
+var home = require('./landing_page');
+var mprouter     = require('./mprouter');
 
 var app = express();
 
@@ -21,6 +22,8 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static());
+
 
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
@@ -30,14 +33,15 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', function (req,res) {
-	res.json( {
-		messsage : "Damn it Sourabh, create a landing page already!!"
-	});
-});
-app.get('/cs398vl/mp/:num', mprouter.renderMP);
-app.get('/cs398vl/mp/:num/data', mprouter.getMPData);
+app.get('/', home.render);
+routeMPs();
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+
+function routeMPs() {
+	app.get('/cs398vl/mp/:num', mprouter.renderMP);
+	app.get('/cs398vl/mp/:num/data', mprouter.getMPData);
+}
