@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.4.2/pure.css">
 <style>
 
 .node circle {
@@ -21,22 +22,73 @@
 </style>
 
 <head>
-  <title>MP 2</title>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="My MP 2 Submission for CS 398 VL">
+
+    <title>MP 2</title>
+
+    
+
+
+
+
+
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.4.2/pure.css">
+
+
+
+  
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="css/layouts/gallery-grid-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="css/layouts/gallery-grid.css">
+    <!--<![endif]-->
+  
+
+  
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="css/layouts/gallery-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="css/layouts/gallery.css">
+    <!--<![endif]-->
+  
+
+
+
+
+    
+
+    
+
+    
+
 </head>
 <body width=1000 height = 1000>
-<h1>MP 2 : Hierarchichal Structures</h1>
-<h4>
-  This is a radial tree that represents the relations between words used in the book "Once and Future King".
-  <br><br>
-  The tree starts with a sentinel node labeled "root" in the center of the circle and branches outwards to the ten most common words in the corpus. From these ten words, I used Wordnet to find all synonyms to each word that was also used in the corpus. This was recursively repeated on for three levels of iteration. I could have gone longer but would have sacrificed the cleanliness of the tree.
-  <br><br>
-  To extract this data, I did not use the NLTK library. I decided I wanted to try out the Natural Module for Node.js. This module has a lot of similair features as NLTK. It has tokenization, porter stemming, stopwords removal, word distance calculation, phonetical analysis, and complete a complete WordNet interface. It also made sense to use Javascript in the Natural Language analysis as I was dealing with JSON data right from the beginning so it was a much smoother transition to get the data into the format I wanted.
-  <br><br>
-  The biggest problem I had was in the fact that I had unintentionally made asynchronous calls. I was trying to access the data before it was done processing and there was no clear way of telling when it would be done. My HORRIBLE solution was to use a delay funcion to delay retrieving my data for a set period of time after which my data would undoubtedly be finished processing.
-  <br><br>
-  I enjoyed using this library as I know Javascript better than Python and now know a powerful tool I can use in Node.js applications. You can view the code for this site at: https://github.com/sourabhdesai/CS-398-VL-MP2 The code for the NLP analysis is in the "MP2_NodeApp" directory which can be found from the root directory
-  <br><br><br>
-</h4>
+<div class="pure-u-1">
+    <div class="l-box">
+      <h2  style="padding: 0 10px" >MP 2 : Hierarchichal Structures</h2>
+
+      <p style="padding: 0 15px" >
+        This is a radial tree that represents the relations between words used in the book "Once and Future King".
+      </p>
+      <p style="padding: 0 15px" > 
+        The tree starts with a sentinel node labeled "root" in the center of the circle and branches outwards to the ten most common words in the corpus. From these ten words, I used Wordnet to find all synonyms to each word that was also used in the corpus. This was recursively repeated on for three levels of iteration. I could have gone longer but would have sacrificed the cleanliness of the tree.
+      </p>
+      <p style="padding: 0 15px" >
+        To extract this data, I did not use the NLTK library. I decided I wanted to try out the Natural Module for Node.js. This module has a lot of similair features as NLTK. It has tokenization, porter stemming, stopwords removal, word distance calculation, phonetical analysis, and complete a complete WordNet interface. It also made sense to use Javascript in the Natural Language analysis as I was dealing with JSON data right from the beginning so it was a much smoother transition to get the data into the format I wanted.
+      </p>
+      <p style="padding: 0 15px" >
+        The biggest problem I had was in the fact that I had unintentionally made asynchronous calls. I was trying to access the data before it was done processing and there was no clear way of telling when it would be done. My HORRIBLE solution was to use a delay funcion to delay retrieving my data for a set period of time after which my data would undoubtedly be finished processing.
+      </p>
+      <p style="padding: 0 15px" >
+        I enjoyed using this library as I know Javascript better than Python and now know a powerful tool I can use in Node.js applications. You can view the code for this site at: https://github.com/sourabhdesai/CS-398-VL-MP2 The code for the NLP analysis is in the "MP2_NodeApp" directory which can be found from the root directory
+      </p>
+  </div>
+</div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.4.2/pure.css">
 <style>
 
 .link {
@@ -59,23 +60,74 @@
 
 </style>
 <head>
-  <title>MP 1</title>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="My MP 1 Submission for CS 398 VL">
+
+    <title>MP 1</title>
+
+    
+
+
+
+
+
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.4.2/pure.css">
+
+
+
+  
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="css/layouts/gallery-grid-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="css/layouts/gallery-grid.css">
+    <!--<![endif]-->
+  
+
+  
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="css/layouts/gallery-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="css/layouts/gallery.css">
+    <!--<![endif]-->
+  
+
+
+
+
+    
+
+    
+
+    
+
 </head>
 <body id="main" width="960" height="750">
-<h1>MP 1 : Word Freuency</h1>
-<h4>
-            This graph connects the Chapters and Parts of Speech with the 15 Most Frequent Words in the book "Once and Future King" by T.H. White.<br><br>
-            Each word node can have anywhere from two to five edges.<br><br>
-            Each must have an edge linking it to the part of speech that it belongs to, and at least one more edges connecting it to the Chapters of the book that it came from.<br><br>
-            The graph naturally clusters nodes of the same type together. It ussually clusters chapters in the center with the words forming a circle around it. Otherwise, it can also take various other forms with different types of clustering.<br><br>
-            The graph also interacts with mouse clicks.<br><br>
-            The edges have also been color coded in the following manner:<br><br>
-              <font color="red">Red : Word -> Chapter 1 </font><br>
-              <font color="green">Green : Word -> Chapter 2 </font><br>
-              <font color="blue">Blue : Word -> Chapter 3 </font><br>
-              <font color="orange">Orange : Word -> Chapter 4 </font><br>
-              <font color="gray">Dashed : Word -> Part of Speech </font><br><br><br>
-</h4>
+<div class="pure-u-1">
+    <div class="l-box">
+      <h2 style="padding: 0 10px" >MP 1 : Word Freuency</h2>
+
+      <p style="padding: 0 15px" >
+        This graph connects the Chapters and Parts of Speech with the 15 Most Frequent Words in the book "Once and Future King" by T.H. White.<br>
+        Each word node can have anywhere from two to five edges.<br>
+        Each must have an edge linking it to the part of speech that it belongs to, and at least one more edges connecting it to the Chapters of the book that it came from.<br>
+        The graph naturally clusters nodes of the same type together. It ussually clusters chapters in the center with the words forming a circle around it. Otherwise, it can also take various other forms with different types of clustering.<br>
+        The graph also interacts with mouse clicks.<br>
+        The edges have also been color coded in the following manner:<br>
+      </p>
+
+      <p style="padding: 0 15px" >
+        <font color="red">Red : Word -> Chapter 1 </font><br>
+        <font color="green">Green : Word -> Chapter 2 </font><br>
+        <font color="blue">Blue : Word -> Chapter 3 </font><br>
+        <font color="orange">Orange : Word -> Chapter 4 </font><br>
+        <font color="gray">Dashed : Word -> Part of Speech </font><br><br><br>
+      </p>
+  </div>
+</div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 var width  = 960,
