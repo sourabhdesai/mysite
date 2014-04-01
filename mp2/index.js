@@ -85,7 +85,7 @@ exports.generateData = function() {
 		data.children[i] = new WordNetter(pairs[i].key,3);
 	}
 
-	// Really hacky way of waiting for asychronous calls to end...HORRIBLE practice I know
+	// Really hacky way of waiting for asychronous calls to end...HORRIBLE practice, I know
 	setTimeout(function(){
 
 		function removeEmpties(data) {

@@ -1,5 +1,6 @@
 var mp1 = require('../mp1');
 var mp2 = require('../mp2');
+var mp3 = require('../mp3');
 
 exports.renderMP = function (req,res) {
 	var mpNum = req.param("num");
@@ -8,7 +9,9 @@ exports.renderMP = function (req,res) {
 		// TODO
 	} else if (mpNum == "2") {
 		mp2.render(req,res);
-	} else {
+	} else if (mpNum == "3") {
+		mp3.render(req,res);
+	}else {
 		res.json({
 			message : "Error: MP " + mpNum + " not available!"
 		});
@@ -18,11 +21,12 @@ exports.renderMP = function (req,res) {
 exports.getMPData = function(req,res) {
 	var mpNum = req.param('num');
 	if (mpNum == "1") {
-		res.json(mp1.getData());
+		res.json( mp1.getData() );
 	} else if (mpNum == "2") {
-		res.json(mp2.getData());
-		// console.log(mp2.data);
-	} else {
+		res.json( mp2.getData() );
+	} else if(mpNum == "3") {
+		res.json( mp3.getData() );
+	}else {
 		res.json({
 			message : "Error: MP " + mpNum + " not available!"
 		});
