@@ -67,12 +67,13 @@ d3.json("data", function(ofkcharacters) {
   });
 
   // Convert links to matrix; count character occurrences.
+  // Convert links to matrix; count character occurrences.
   ofkcharacters.links.forEach(function(link) {
     // z indicates opacity of cell at matrix coordinate
-    matrix[link.source][link.target].z += link.value;
-    matrix[link.target][link.source].z += link.value;
-    matrix[link.source][link.source].z += link.value;
-    matrix[link.target][link.target].z += link.value;
+    matrix[link.source][link.target].z += link.mean_pos * 5;
+    matrix[link.target][link.source].z += link.mean_pos * 5;
+    matrix[link.source][link.source].z += link.mean_pos * 5;
+    matrix[link.target][link.target].z += link.mean_pos * 5;
     //console.log(nodes[link.source]);
     //console.log(nodes[link.target]);
     // The count field determines the ordering of the graph under the "by Chronology" ordering.
