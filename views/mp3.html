@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html class="ocks-org do-not-copy">
 <meta charset="utf-8">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.4.2/pure.css">
 <title>OFK Co-occurrence</title>
 <style>
 
@@ -24,6 +25,9 @@ text.active {
 <header>
   <aside>April 1st, 2014</aside>
   Kevin Wang & Sourabh Desai
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MP 3 Submission for CS 398 VL">
 </header>
 
 <h1><i>The Once and Future King</i> Co-occurrence</h1>
@@ -202,7 +206,7 @@ d3.json("data", function(ofkcharacters) {
   Ordering by Name will simply show you the adjacency matrix where the X and Y axis Names are ordered alphabetically. <br>
   Ordering by Chronology of Co-Occurrences will show you the adjacency matrix where the X axis has its Character names ordered where the leftmost characters will have more relationships(Co-Occurrences) that occur near the begginning of the text, and the rightmost characters will have more relationships that occur near the end of text<br> 
   This Ordering shows us some interesting information about the text.<br>
-  We see that There is a large clustering opaque cells towards the left side of the matrix. This shows that the relationships that occurred the most often occurred mostly during the begginning of the text. To the right of this cluster, we can find another cluster of more transparent cells. This indicates that co-occurrences that didn't occur too often throughout the text ussually occurred after the co-occurrences that occurred more often. We also find a lack of grayed cells towards the right of the matrix, meaning there are less character co-ocurrences towards the end of the story.<br>
+  We see that There is a large clustering opaque cells towards the left side of the matrix. This shows that the relationships that occurred the most often occurred mostly during the begginning of the text. To the right of this cluster, we can find some of the more transparent cells. This indicates that co-occurrences that didn't occur too often throughout the text ussually occurred after the co-occurrences that occurred more often. We also find a lack of grayed cells towards the right of the matrix, meaning there are less character co-ocurrences towards the end of the story.<br>
   This makes sense in terms of the way story telling ussually works. Ussually, all the most important (More frequently Co-Ocurring/Opaque) relationships are developed at the start of the story. The story then moves on to other relationships that are perhaps not as prominent (Less Frequently Co-Occurring/Transparent). Also, towards the end of the story, it makes sense to have less character co-occurrences as the story moves onto the plot which involves the actions of the characters rather than their relationships with one another.
 </p>
 
