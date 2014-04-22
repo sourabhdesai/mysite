@@ -44,4 +44,5 @@ http.createServer(app).listen(app.get('port'), function(){
 function routeMPs() {
 	app.get('/cs398vl/mp/:num', mprouter.renderMP);
 	app.get('/cs398vl/mp/:num/data', mprouter.getMPData);
+	app.get('/cs398vl/notes', mprouter.renderNotes);
 }

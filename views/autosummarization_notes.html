@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.4.2/pure.css">
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>CS 398 VL Text Summarization Presentasion</title>
+    </head>
+    <body>
+
+<h1>CS 398 VL Text Summarization Presentasion</h1>
+
+<h2>Structure</h2>
+
+<ol>
+<li>What is Text Summarization?
+<ul><li>Simple Explanation</li>
+<li>Super High Level Explanation of how to do it.</li>
+<li>A quick example of a summaray of an article</li></ul></li>
+<li>Discussion
+<ul><li>Ask people to summarize a very popular piece of text (i.e. Harry Potter, maybe a movie? maybe just ask them to read some text)</li></ul></li>
+<li>Go Deeper into Various Algos for TS
+<ul><li>For Each:
+<ul><li>High Level explanation of how the algorithm goes from raw data to summarized text</li></ul></li>
+<li>Differences between each algorithm</li></ul></li>
+</ol>
+
+<h2>Slide Text</h2>
+
+<ol>
+<li><p>What is Text Summarazation?</p>
+
+<ul><li>Extracting the most useful portions of text from a <strong>larger body of text</strong> in such a way that it describes all valuable <strong>information</strong> given by that text.</li>
+<li>Especially Important today as the rapid growth of digital textual information. We need to find ways to condense large sets of textual information rapidly without human intervention.</li>
+<li>Two Main Methods of Summarization:
+<ul><li>Extraction
+<ul><li>Two Uses of Summarization via Extraction
+<ul><li>Selecting individual key words or phrases to create a <em>tag</em> for a document of text.</li>
+<li>Selecting the most important sentences within a document to create a paragraph summaray.
+<ul><li>Will be focusing on this kind</li>
+<li>Example: smrry.com</li></ul></li>
+<li><a href="http://aclweb.org/anthology//W/W08/W08-1106.pdf">Source</a></li></ul></li></ul></li>
+<li>Abstraction
+<ul><li>Paraphrases sections of a document via natural language generation
+<ul><li>Natural Language Generation is fairly new field of study for creating machine representations of a language based on a text's <em>logical form</em>.</li></ul></li>
+<li><a href="http://aclweb.org/anthology//W/W08/W08-1106.pdf">Source</a></li></ul></li></ul></li></ul></li>
+<li><p>Discussion Summarization</p>
+
+<ul><li>Give them a piece of text to read for 5 minutes or so … then give them another 2-3 minutes to write out a summaray</li>
+<li>Now put that text into smmry.com and compare the results from its summarization algorithm to the summaries that they wrote.
+<ul><li>Ask them if they notice any big differences in the way that the program wrote the summarization vs the way they class did.</li>
+<li>Ask who they think did a better job</li>
+<li>Ask someone to share the way decided to choose what to write down for their summaray</li></ul></li></ul></li>
+<li><p>Deeper Algorithm Discussion</p>
+
+<ul><li>Two Major Problems in Algorithm Development:
+<ul><li>Centrality
+<ul><li>How relevant is the info presented by the generated summaray to the overarching message of document?</li></ul></li>
+<li>Diversity
+<ul><li>Does the summaray relay <strong>all</strong> important peices of info presented in the document?</li></ul></li>
+<li>Centrality and Diversity are ussually a battle against each other
+<ul><li>The more central a summaray is, the more <em>specific</em> it is to the main topic of the document. The more diverse a summaray is, the more general its information is (less specific). It is essentially a war between <strong>specificity</strong> and <strong>breadth</strong>.
+<ul><li>This is where the <strong>art</strong> of NLP comes into play, as Cinda has mentioned before. The designer of the algorithm must design it in such a way that it finds a <em>good</em> balance between breadth and specificity.
+<ul><li>Even then, what does good mean? Might be domain specific. Summarizing a story might require diversity to cover the entire plot, whereas summarizing a research paper may require more centrality to only cover the main points of it.</li></ul></li></ul></li>
+<li>GRASSHOPPER Algorithm is known to do a good job at balancing the two.</li></ul></li></ul></li>
+<li>Extraction Based Auto Summarization
+<ul><li>Steps for the Extraction Based Summarization Framework <em>(EBSF)</em>
+<ol><li>Preprocessing
+<ul><li>Sentence Segmentation</li>
+<li>Short Sentence Removal</li>
+<li>Word Segmentation</li>
+<li>Stop Words Removal</li>
+<li>Short Words Removal</li>
+<li>Stemming</li></ul></li>
+<li>Sentence Representation
+<ul><li>Term Count
+<ul><li>Represents Each term as a <em>vector</em>, within which each element is a word in the sentence. Each word is quantified by its frequency within the sentence.</li></ul></li>
+<li>TF-ISF Transformation
+<ul><li>Similair to TF-IDF but instead of evaluating a words relevance to the <strong>entire document</strong>, it evaluates its relevance to the sentence it is in (Thus Term Frequency - Inverse <em>Sentence</em> Frequency).</li></ul></li>
+<li>LSA Transformation
+<ul><li><em>Latent Semantic Analysis</em>: A method to determine the importance of a word by using information of where it is used throught the text. It has been proven to be as effective as human attempts at solving the same problem. Create a matrix that signifies word count per paragraph. Rows are Words, Columns are Paragraphs. Then use Singular Value Decomposition to reduce number of columns</li>
+<li><a href="http://lsa.colorado.edu/papers/dp1.LSAintro.pdf">Source</a> </li></ul></li></ul></li>
+<li>Similarity Measurement
+<ul><li>Lexical Similarity
+<ul><li>Measures similarity between languages based on word similarity and meaning</li></ul></li>
+<li>Jaccard similarity coefﬁcient
+<ul><li>Measures similarity of sentences given as a Term Count Matrix</li></ul></li>
+<li>Cosine Similarity
+<ul><li>Measures similarity of vectors by taking cosine of angle between them. 0 means completely disimilair, 1 means completely similair. Vectors are given by columns of TF-ISF Matrix or LSA Matrix</li></ul></li>
+<li>Discourse Similarity</li></ul></li>
+<li>Content Selection
+<ul><li>Document centrality score <em>(Sdc)</em>
+<ul><li>Constructs a <em>similarity graph</em> from a similarity matrix. Then runs a centrality algorithm on the graph to obtain centrality scores for all nodes within the graph. After normalizing the centralities, these centrality scores can be used to determine the salience of a sentence.</li></ul></li>
+<li>Topic Centrality Score <em>(Scc)</em>
+<ul><li>Same as document centrality scoring but input similarity matrix is for multiple documents of the same topic. Thus, gives centrality measurement for sentences from multiple documents.</li></ul></li>
+<li>Compactness Score <em>(Sc)</em>
+<ul><li>Longer Sentences given lower scores. The reasoning behind this is that a good summary should contain short but informative and relevant sentences. Also helps to differentiate between longer sentences that express the same information contained in a shorter sentence (Choose shorter sentence to reduce redundancy).</li></ul></li>
+<li>Diversity Score <em>(Sd)</em>
+<ul><li>Quantifies the similarity of a <em>candidate</em> sentence and a sentence that is already determined to be included in the summaray. Helps to avoid redundancy in summaray.</li></ul></li>
+<li>Final Score for a sentence is calculated by a weighted average of the scores for it.</li>
+<li>Final Score = ( Wdc * Sdc ) + ( Wcc * Scc ) + ( Wc * Sc ) + ( Wd * Sd )
+<ul><li>The weight values are what are to be tweaked in order to find a balance between centrality and diversity.</li></ul></li></ul></li>
+<li>Viola! The Summaray
+<ul><li>Finally, sentences are ranked by their final scores and then sorted. Top X sentences are presented to User in order of appearance within text <em>(X is the number of sentences wanted within the paragraph … Either predetermined, calculated, or given by user)</em>. </li></ul></li></ol></li>
+<li><a href="http://www.diva-portal.org/smash/get/diva2:352481/FULLTEXT01.pdf">Source</a></li></ul></li>
+<li>Abstraction Based Summaries
+<ul><li>Creates a internal <em>semantic</em> representation of the textual information and then runs algorithms on it to create a concise summaray.
+<ul><li>Multiple ways of creating an internal sementic representation. Still under heavy development so no standard way of doing it yet.</li></ul></li>
+<li>Problems with Extraction Based Summaries:
+<ul><li>Can be difficult to balance between Generality and Specificity</li>
+<li>Not good for summarizing highly redundant text
+<ul><li>User Reviews of a Product</li></ul></li>
+<li>Bad at Creating <em>Concise</em> Summaries</li>
+<li>All these problems are taken care of with Abstraction Based Summarization as it focuses on the <em>meaning</em> of the text. </li></ul></li>
+<li>Problems with Abstraction Based Summarization
+<ul><li>Some methods require manual effort, such as sentence templates that the algorithm designer creates to be filled by the program
+<ul><li>_ is _'s best _
+<ul><li><strong>Ron</strong> is <strong>Harry</strong>'s best <strong>friend</strong></li>
+<li><strong>Harry</strong> is <strong>Hogwart</strong>'s best <strong>Quidditch Player</strong></li></ul></li></ul></li>
+<li>Some methods rely on Natural Language Understanding
+<ul><li>Domain Dependent
+<ul><li>The word "Confidence" has different meanings in the realms of Psychology and Statistics.</li></ul></li></ul></li>
+<li>High Computational Cost</li></ul></li>
+<li><a href="http://kavita-ganesan.com/sites/default/files/opinosis-presentation.ppt.pdf">Source</a></li></ul></li></ul></li>
+</ol>
+	
+    </body>
+</html>
