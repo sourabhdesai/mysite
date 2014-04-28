@@ -1,7 +1,9 @@
-var mp1   = require('../mp1');
-var mp2   = require('../mp2');
-var mp3   = require('../mp3');
-var notes = require('../notes');
+var mp1          = require('../mp1');
+var mp2          = require('../mp2');
+var mp3          = require('../mp3');
+var notes        = require('../notes');
+var finalproject = require('../finalproject');
+
 
 exports.renderMP = function (req,res) {
 	var mpNum = req.param("num");
@@ -32,6 +34,10 @@ exports.getMPData = function(req,res) {
 			message : "Error: MP " + mpNum + " not available!"
 		});
 	}
+};
+
+exports.getFinalProjectData = function(req,res) {
+	finalproject.getData(req,res);
 };
 
 exports.renderNotes = function(req, res) {
