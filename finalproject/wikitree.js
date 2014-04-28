@@ -154,7 +154,7 @@ exports.generateData = function() {
 									name : this.child.title,
 									context : this.child.linkText,
 									article : createArticleSummary(childArticle)
-								}) );
+								},null) );
 							} else {
 								var childWikiLinks = extractLinkedWikis(childArticle);
 								console.log("Found " + childWikiLinks.length + " Links for " + this.child.title);
@@ -177,7 +177,7 @@ exports.generateData = function() {
 									context : child.linkText,
 									article : childArticle,
 									children : createArticleSummary(childWikiLinks)
-								}));
+								},null));
 							}
 						});	
 					};
