@@ -33,13 +33,13 @@ exports.generateData = function(req, res) {
 
 	var classifier = require('./texts_classifier.js');
 
-	print("About to Read zen_full.txt");
+	//print("About to Read zen_full.txt");
 
 	var raw       = fs.readFileSync("./finalproject/texts/relevant/zen_full.txt").toString();
 	var tokenizer = new natural.WordTokenizer();
 	var tokens    = tokenizer.tokenize(raw);
 
-	print("Read and Tokenized");
+	//print("Read and Tokenized");
 
 	// Remove stopwords
 	for (var i = 0; i < natural.stopwords.length; i++) {
@@ -51,12 +51,12 @@ exports.generateData = function(req, res) {
 		};
 	};
 
-	print("Removed Stopwords");
+	//print("Removed Stopwords");
 
 	function extractLinkedWikis(article) {
 		var innerWikis = article.match(/<a href="http:\/\/en.wikipedia.org\/wiki\/\S*">(\w| )*<\/a>/g);
 		if (!innerWikis) {
-			print("Weird ... Couldn't find any Inner Links".red);
+			//print("Weird ... Couldn't find any Inner Links".red);
 			return [];
 		}
 		var innerWikisJSON = new Array(innerWikis.length);
@@ -90,22 +90,22 @@ exports.generateData = function(req, res) {
 
 	var LinkTrie = new natural.Trie();
 
-	print("About to Search for Zen Article");
+	//print("About to Search for Zen Article");
 
 	var result = wait.for(wikipedia.searchArticle, zenQuery);
 
-	print("Got Zen Article");
+	//print("Got Zen Article");
 	var zenLinks = extractLinkedWikis(result);
 	var before = zenLinks.length;
-	print("Extracted " + zenLinks.length + " Links from Zen Article");
+	//print("Extracted " + zenLinks.length + " Links from Zen Article");
 	for (var i = 0; i < zenLinks.length; i++) {
 		if( LinkTrie.contains( zenLinks[i].title ) || LinkTrie.contains( zenLinks[i].linkText ) )  {
 			zenLinks.splice(i,1);
 			i--;
 		} else if( zenLinks[i].title.indexOf("Category:") != -1 || zenLinks[i].title.indexOf("wikt:") != -1 || zenLinks[i].title.indexOf("wiktionary:") != -1 ) {
-			print("Found 'Category:'/'wikt:'/'wiktionary:' at " + i + " in " + zenLinks[i].title);
+			//print("Found 'Category:'/'wikt:'/'wiktionary:' at " + i + " in " + zenLinks[i].title);
 		} else if( !classifier.isRelevant( zenLinks[i].title) && !classifier.isRelevant( zenLinks[i].linkText) ) {
-			print("Found: ( " + zenLinks[i].title + " , " + zenLinks[i].linkText  + " ) To be Irrelevant");
+			//print("Found: ( " + zenLinks[i].title + " , " + zenLinks[i].linkText  + " ) To be Irrelevant");
 			zenLinks.splice(i,1);
 			i--;
 		} else {
@@ -113,8 +113,8 @@ exports.generateData = function(req, res) {
 		}
 	};
 	var after = zenLinks.length;
-	print("After removing Irrelevant Links, only have " + zenLinks.length + " Links Left\nHere are the Remaining Links");
-	print("Thats a compression of " + ( ( 100 * ( after / before ) ) + "%" ).cyan );
+	//print("After removing Irrelevant Links, only have " + zenLinks.length + " Links Left\nHere are the Remaining Links");
+	//print("Thats a compression of " + ( ( 100 * ( after / before ) ) + "%" ).cyan );
 	print(zenLinks);
 	/**
 	Now the Hard (Expensive) Part!
@@ -122,8 +122,8 @@ exports.generateData = function(req, res) {
 	*/
 
 	var initCompreshThresh = 10; // Compression Threshold ... articles with a compreshThresh or greater percentage of relevant links will be added. 
-	var decayFactor = 2; // In reality, try 1.75
-	var maxCompreshThresh = 85;
+	var decayFactor = 2.5; // In reality, try 1.75
+	var maxCompreshThresh = 90;
 
 
 	var WikiTree = function(node,level) {
@@ -131,6 +131,7 @@ exports.generateData = function(req, res) {
 		this.context = node.context;
 		this.text    = node.article;
 		this.level = level;
+		print(this.level);
 
 		if (node.children) {
 			this.children = node.children;
@@ -147,7 +148,7 @@ exports.generateData = function(req, res) {
 		}
 
 		WikiTree.prototype.searchChild = function(child) {
-			print("Searching for Link Title \"" + child.title + "\" And Link Text \"" + child.linkText + "\"");
+			//print("Searching for Link Title \"" + child.title + "\" And Link Text \"" + child.linkText + "\"");
 
 			var childQuery = {
 				query : child.title,
@@ -157,9 +158,9 @@ exports.generateData = function(req, res) {
 
 			var childArticle = wait.for(wikipedia.searchArticle, childQuery);
 
-			print("Got Wikipedia Response for " + child.title);
+			//print("Got Wikipedia Response for " + child.title);
 			if (childArticle == null) {
-				print("Didn't get Article for " + child.title);
+				//print("Didn't get Article for " + child.title);
 				return new WikiTree({
 					name : child.title,
 					context : child.linkText,
@@ -171,7 +172,7 @@ exports.generateData = function(req, res) {
 			
 			var before = childWikiLinks.length;
 			
-			print("Found " + childWikiLinks.length + " Links for " + child.title);
+			//print("Found " + childWikiLinks.length + " Links for " + child.title);
 			
 			var numRepeated = 0;
 
@@ -198,8 +199,8 @@ exports.generateData = function(req, res) {
 
 			var compression = 100 * ( after / ( before - numRepeated ) );
 
-			print("After pruning, " + ( childWikiLinks.length + "" ).yellow + " Links left for " + child.title);
-			print("Thats a compression of " + ( compression + "%" ).cyan );
+			//print("After pruning, " + ( childWikiLinks.length + "" ).yellow + " Links left for " + child.title);
+			//print("Thats a compression of " + ( compression + "%" ).cyan );
 
 			var levelCompreshThresh = initCompreshThresh + Math.pow(decayFactor, this.level);
 			levelCompreshThresh = Math.min(levelCompreshThresh,maxCompreshThresh);
@@ -221,14 +222,14 @@ exports.generateData = function(req, res) {
 		WikiTree.prototype.descend = function() {
 			// Descend to the next level ... Meaning find the children of the current children (If there are any)
 			if (!this.children) {
-				print( ("Leaf at " + this.name ).underline.yellow );
+				//print( ("Leaf at " + this.name ).underline.yellow );
 				return;
 			}
 
 			for (var i = 0; i < this.children.length; i++) {
-				print( "Doing Descend for \""+this.name + "\" at child \"" + ( this.children[i].title || "( no title )" ) +'"' );
+				//print("Doing Descend for \""+this.name + "\" at child \"" + ( this.children[i].title || "( no title )" ) +'"' );
 				if ( this.children[i].title.indexOf(":") != -1 ) {
-					print("Found ':' at " + i + " in " + this.children[i].title);
+					//print("Found ':' at " + i + " in " + this.children[i].title);
 					this.children.splice(i,1);
 					i--;
 				} else {
@@ -240,7 +241,7 @@ exports.generateData = function(req, res) {
 				}
 			};
 			
-			print( ( "Done With Descend For " + this.name).underline.magenta );
+			//print( ( "Done With Descend For " + this.name).underline.magenta );
 		
 		};
 
@@ -265,12 +266,4 @@ exports.generateData = function(req, res) {
 	    res.json(data);
 	});
 };
-/*
-fs.readFile("wikitree.js",function(err, jsonFile) {
-	if (err) {
-		print(err);
-	} else {
-		data = JSON.parse(jsonFile);
-	}
-});
-*/
+

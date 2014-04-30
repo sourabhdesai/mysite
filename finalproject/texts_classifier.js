@@ -7,7 +7,7 @@ var TfIdf     = natural.TfIdf;
 var stem      = natural.PorterStemmer.stem;
 var tokenizer = new natural.WordTokenizer();
 
-var threshold = 1.5;
+var threshold = 4; //1.5 for optimum threshold
 
 var irrelevants = [
 	fs.readFileSync("./finalproject/texts/irrelevant/cricket_wiki_article.txt").toString(),
@@ -155,7 +155,7 @@ exports.isRelevant = function(term) {
 	return ( zenAvg / otherAvg ) >= threshold;
 };
 
-/*
+
 console.log("Testing");
 
 console.log("Test for 'Quality'");
@@ -279,4 +279,4 @@ console.log("numberTrue : " + numberTrue);
 console.log("numIrrelWords : " + numIrrelWords);
 
 console.log("False Positive Percentage: " + ( 100 * ( numberTrue / numIrrelWords ) + "%").green );
-*/
+
