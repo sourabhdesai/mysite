@@ -1,7 +1,7 @@
 var wikitree = require('./wikitree.js');
 
 exports.getData = function(req,res) {
-	wikitree.getData(res.json);
+	wikitree.getData(req,res);
 };
 
 exports.render = function(req, res) {

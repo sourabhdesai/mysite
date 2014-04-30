@@ -9,16 +9,16 @@ function print(x) {
 	console.log(x);
 }
 
-exports.getData = function(cb) {
+exports.getData = function(req,res) {
 	if (data) {
-		cb(data);
+		res.json(data);
 	} else {
-		fs.readFile("wikitree.js",function(err, jsonFile) {
+		fs.readFile("wikitree.json",function(err, jsonFile) {
 			if (err) {
-				cb(err);
+				res.json(err);
 			} else {
 				data = JSON.parse(jsonFile);
-				cb(data);
+				res.json(data);
 			}
 		});
 	}
