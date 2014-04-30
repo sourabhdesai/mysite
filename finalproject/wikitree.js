@@ -1,70 +1,83 @@
-var fs = require('fs');
+var fs     = require('fs');
+var colors = require('colors');
 
 var data = null;
 
-exports.getData = function() {
+exports.wait = null;
+
+function print(x) {
+	console.log(x);
+}
+
+exports.getData = function(cb) {
 	if (data) {
-		return data;
+		return cb(data);
 	} else {
-		return {
-			message : "Still Loading...Please Try Again Later"
-		};
+		fs.readFile("wikitree.js",function(err, jsonFile) {
+			if (err) {
+				return cb(err);
+			} else {
+				data = JSON.parse(jsonFile);
+				cb(data);
+			}
+		});
 	}
 };
 
-exports.generateData = function() {
+exports.generateData = function(req, res) {
+	var wait  = exports.wait;
+
 	var wikipedia = require('wikipedia-js');
 	var async     = require('async');
 	var natural   = require('natural');
 
-	var TfIdf = natural.TfIdf;
+	var classifier = require('./texts_classifier.js');
 
-	var zenTfidf = new TfIdf();
+	print("About to Read zen_full.txt");
 
-	console.log("About to Read zen_full.txt");
-
-	var raw       = fs.readFileSync("./finalproject/zen_full.txt").toString();
+	var raw       = fs.readFileSync("./finalproject/texts/relevant/zen_full.txt").toString();
 	var tokenizer = new natural.WordTokenizer();
 	var tokens    = tokenizer.tokenize(raw);
 
-	console.log("Read and Tokenized");
+	print("Read and Tokenized");
 
 	// Remove stopwords
 	for (var i = 0; i < natural.stopwords.length; i++) {
 		for (var a = 0; a < tokens.length; a++) {
-			if ( tokens[a] == natural.stopwords[i] )
+			if ( tokens[a] == natural.stopwords[i] ) {
 				tokens.splice(a,1);
+				a--;
+			}
 		};
 	};
 
-	console.log("Removed Stopwords");
-
-	zenTfidf.addDocument(tokens);
-
-	console.log("Created TfIdf Object for Processed Zen Text");
+	print("Removed Stopwords");
 
 	function extractLinkedWikis(article) {
-		var innerWikis     = article.match(/<a href="http:\/\/en.wikipedia.org\/wiki\/\S*">(\w| )*<\/a>/g);
+		var innerWikis = article.match(/<a href="http:\/\/en.wikipedia.org\/wiki\/\S*">(\w| )*<\/a>/g);
 		if (!innerWikis) {
-			console.log("Weird ... Couldn't any Inner Links");
+			print("Weird ... Couldn't find any Inner Links".red);
 			return [];
 		}
 		var innerWikisJSON = new Array(innerWikis.length);
 
-		for (var i = innerWikis.length - 1; i >= 0; i--) {
-			var linkHTML   = innerWikis[i];
-			var linkIndex  = linkHTML.indexOf('<a href="http://en.wikipedia.org/wiki/') + 38;
-			var linkTextIndex  = linkHTML.indexOf('">') + 2;
+		for (var i = 0; i < innerWikis.length; i++) {
+			var linkHTML      = innerWikis[i];
+			var linkIndex     = linkHTML.indexOf('<a href="http://en.wikipedia.org/wiki/') + 38;
+			var linkTextIndex = linkHTML.indexOf('">') + 2;
 			// Extract actual link info
-			var title = linkHTML.substring(linkIndex, linkTextIndex - 2).replace(/_/g, " ");
+			var title    = linkHTML.substring(linkIndex, linkTextIndex - 2).replace(/_/g, " ");
 			var linkText = linkHTML.substring(linkTextIndex, linkHTML.indexOf("</a>") );
 
 			innerWikisJSON[i] = {
 				title : title,
 				linkText : linkText
 			};
+
 		};
+
 		return innerWikisJSON;
+
 	};
 
 
@@ -77,168 +90,187 @@ exports.generateData = function() {
 
 	var LinkTrie = new natural.Trie();
 
-	console.log("About to Search for Zen Article");
+	print("About to Search for Zen Article");
 
-	wikipedia.searchArticle(zenQuery, function(err, result) {
-		if (err) {
-			console.log(err);
+	var result = wait.for(wikipedia.searchArticle, zenQuery);
+
+	print("Got Zen Article");
+	var zenLinks = extractLinkedWikis(result);
+	var before = zenLinks.length;
+	print("Extracted " + zenLinks.length + " Links from Zen Article");
+	for (var i = 0; i < zenLinks.length; i++) {
+		if( LinkTrie.contains( zenLinks[i].title ) || LinkTrie.contains( zenLinks[i].linkText ) )  {
+			zenLinks.splice(i,1);
+			i--;
+		} else if( zenLinks[i].title.indexOf("Category:") != -1 || zenLinks[i].title.indexOf("wikt:") != -1 || zenLinks[i].title.indexOf("wiktionary:") != -1 ) {
+			print("Found 'Category:'/'wikt:'/'wiktionary:' at " + i + " in " + zenLinks[i].title);
+		} else if( !classifier.isRelevant( zenLinks[i].title) && !classifier.isRelevant( zenLinks[i].linkText) ) {
+			print("Found: ( " + zenLinks[i].title + " , " + zenLinks[i].linkText  + " ) To be Irrelevant");
+			zenLinks.splice(i,1);
+			i--;
 		} else {
-			console.log("Got Zen Article");
-			console.log("Here it is:\n" + result);
-			var zenLinks = extractLinkedWikis(result);
-			console.log("Extracted " + zenLinks.length + " Links from Zen Article");
-			for (var i = 0; i < zenLinks.length; i++) {
-				if ( zenLinks[i].title.indexOf("Category:" == 0) ) {
-					zenLinks.splice(i,1);
-				} else if( LinkTrie.contains( zenLinks[i].title ) || LinkTrie.contains( zenLinks[i].linkText ) )  {
-					zenLinks.splice(i,1);
-				} else if( zenTfidf.tfidf( zenLinks[i].title, 0 ) <= 0 && zenTfidf.tfidf( zenLinks[i].linkText, 0 ) <= 0 ) {
-					zenLinks.splice(i,1);
-				} else {
-					LinkTrie.addStrings( [ zenLinks[i].title, zenLinks[i].linkText ] );
-				}
-			};
-			console.log("After removing Irrelevant Links, only have " + zenLinks.length + " Links Left\nHere are the Remaining Links");
-			console.log(zenLinks);
-
-			/**
-			Now the Hard (Expensive) Part!
-			SYNCHRONOUSLY create the Wikitree
-			*/
-			var WikiTree = function(node, cb) {
-				this.name    = node.name;
-				this.context = node.context;
-				this.text    = node.article;
-
-				if (node.children) {
-					this.children = node.children;
-				}
-
-				function createArticleSummary(article) {
-					// TODO: Must Implement
-					return article;
-				}
-
-				function isIrrelevant(article, title, linkText) {
-					// Tweak Here
-					var articleTfIdf = new TfIdf();
-					articleTfIdf.addDocument(article);
-
-					var titleRelevanceToArticle = articleTfIdf.tfidf(title,0);
-					var textRelevanceToArticle = articleTfIdf.tfidf(linkText,0);
-
-					var titleRelevanceToZen = zenTfidf.tfidf(title,0);
-					var textRelevanceToZen = zenTfidf.tfidf(linkText,0);
-
-					return ( titleRelevanceToZen / titleRelevanceToArticle >= 1 ) || ( textRelevanceToZen / textRelevanceToArticle >= 1 );
-
-				}
-
-				var childSearcher = function(child) {
-					this.child = child;
-					// Returns a WikiTree for the child
-					childSearcher.prototype.exec = function(cb) {
-						console.log("Searching for Link Title \"" + this.child.title + "\" And Link Text \"" + this.child.linkText + "\"");
-
-						var childQuery = {
-							query : this.child.title,
-							format : "html",
-							summaryOnly : false
-						};
-
-						wikipedia.searchArticle(childQuery, function(error, childArticle) {
-							console.log("Got Wikipedia Response for " + this.child.title);
-							if (error) {
-								console.log("Error at " + this.name + "\n" + error);
-								cb(null, new Wikitree({
-									name : this.child.title,
-									context : this.child.linkText,
-									article : createArticleSummary(childArticle)
-								},null) );
-							} else {
-								var childWikiLinks = extractLinkedWikis(childArticle);
-								console.log("Found " + childWikiLinks.length + " Links for " + this.child.title);
-								for (var i = childWikiLinks.length - 1; i >= 0; i--) {
-									if ( childWikiLinks[i].title.indexOf("Category:") == 0 ) {
-										childWikiLinks.splice(i,1);
-									} else if ( LinkTrie.contains(childWikiLinks[i].title) || LinkTrie.contains(childWikiLinks[i].linkText) ) {
-										childWikiLinks.splice(i,1);
-									} else if ( isIrrelevant( childWikiLinks[i] ) ) {
-										childWikiLinks.splice(i,1);
-									} else {
-										LinkTrie.addStrings([ childWikiLinks[i].title, childWikiLinks[i].text ]);
-									}
-								};
-
-								console.log("After pruning, " + childWikiLinks.length + " Links left for " + this.child.title);
-
-								cb(null, new WikiTree({
-									name : this.child.title,
-									context : child.linkText,
-									article : childArticle,
-									children : createArticleSummary(childWikiLinks)
-								},null));
-							}
-						});	
-					};
-				};
-
-				WikiTree.prototype.descend = function() {
-					// Descend to the next level ... Meaning find the children of the current children (If there are any)
-					if (!this.children) {
-						console.log("Leaf at " + this.name);
-						return;
-					}
-
-					var searchers = new Array(this.children.length);
-					for (var i = this.children.length - 1; i >= 0; i--) {
-						searchers = new childSearcher(this.children[i]);
-					};
-
-					var searchFuncs = new Array(searchers.length);
-					for (var i = searchers.length - 1; i >= 0; i--) {
-						searchFuncs[i] = searchers[i].exec;
-					};
-					console.log("Doing Descend for " + this.name);
-					async.series(searchFuncs, function(err, wikichildren) {
-						if (err) {
-							console.log(err);
-						} else {
-							console.log("Finished descend for " + name);
-							children = wikichildren;
-							if (cb)
-								cb(this);
-						}
-					});
-				};
-
-				this.descend();
-			};
-
-			var zenTree = new WikiTree({
-				name : 'Zen & The Art of Motorcycle Maintenance',
-				article : result,
-				children : zenLinks
-			}, function(wt) {
-				console.log("Done Processing! :)\n Gonna save as wikitree.json");
-				data = wt;
-				fs.writeFile("wikitree.json", JSON.stringify(wt,null,'\t'), function (err) {
-				    if(err) {
-				        console.log(err);
-				    } else {
-				        console.log("wikitree.json was saved!");
-				    }
-				});
-			});
-
+			LinkTrie.addStrings( [ zenLinks[i].title, zenLinks[i].linkText ] );
 		}
+	};
+	var after = zenLinks.length;
+	print("After removing Irrelevant Links, only have " + zenLinks.length + " Links Left\nHere are the Remaining Links");
+	print("Thats a compression of " + ( ( 100 * ( after / before ) ) + "%" ).cyan );
+	print(zenLinks);
+	/**
+	Now the Hard (Expensive) Part!
+	SYNCHRONOUSLY create the Wikitree
+	*/
+
+	var initCompreshThresh = 10; // Compression Threshold ... articles with a compreshThresh or greater percentage of relevant links will be added. 
+	var decayFactor = 1.65;
+	var maxCompreshThresh = 85;
+
+
+	var WikiTree = function(node,level) {
+		this.name    = node.name;
+		this.context = node.context;
+		this.text    = node.article;
+		this.level = level;
+
+		if (node.children) {
+			this.children = node.children;
+		}
+
+		function createArticleSummary(article, links) {
+			// TODO: Must Implement
+			return article;
+		}
+
+		function isRelevant(article, title, linkText) {
+			// Tweak Here
+			return classifier.isRelevant(title) || classifier.isRelevant(linkText);
+		}
+
+		WikiTree.prototype.searchChild = function(child) {
+			print("Searching for Link Title \"" + child.title + "\" And Link Text \"" + child.linkText + "\"");
+
+			var childQuery = {
+				query : child.title,
+				format : "html",
+				summaryOnly : false
+			};
+
+			var childArticle = wait.for(wikipedia.searchArticle, childQuery);
+
+			print("Got Wikipedia Response for " + child.title);
+			if (childArticle == null) {
+				print("Didn't get Article for " + child.title);
+				return new WikiTree({
+					name : child.title,
+					context : child.linkText,
+					article : null
+				}, this.level + 1);
+			};
+			
+			var childWikiLinks = extractLinkedWikis(childArticle);
+			
+			var before = childWikiLinks.length;
+			
+			print("Found " + childWikiLinks.length + " Links for " + child.title);
+			
+			var numRepeated = 0;
+
+			for (var i = 0; i < childWikiLinks.length; i++) {
+				if (childWikiLinks[i].title == null || childWikiLinks[i].linkText == null ) {
+					console.log("Houston we have a problem" + JSON.stringify(childWikiLinks[i]) );
+					childWikiLinks.splice(i,1);
+					i--;
+				} else if ( LinkTrie.contains(childWikiLinks[i].title) || LinkTrie.contains(childWikiLinks[i].linkText) ) {
+					numRepeated++;
+					childWikiLinks.splice(i,1);
+					i--;
+				} else if ( !isRelevant( childWikiLinks[i], childWikiLinks[i].title, childWikiLinks[i].linkText ) ) {
+					// Remove if it is irrelevant
+					childWikiLinks.splice(i,1);
+					i--;
+				} else {
+						LinkTrie.addString(childWikiLinks[i].title);
+						LinkTrie.addString(childWikiLinks[i].linkText);
+				}
+			};
+
+			var after = childWikiLinks.length;
+
+			var compression = 100 * ( after / ( before - numRepeated ) );
+
+			print("After pruning, " + ( childWikiLinks.length + "" ).yellow + " Links left for " + child.title);
+			print("Thats a compression of " + ( compression + "%" ).cyan );
+
+			var levelCompreshThresh = initCompreshThresh + Math.pow(decayFactor, this.level);
+			levelCompreshThresh = Math.min(levelCompreshThresh,maxCompreshThresh);
+			if (compression < levelCompreshThresh) {
+				console.log("Child '" + child.title.inverse + "' didn't meet compreshThresh requirement of " + ( levelCompreshThresh + "%" ).inverse.cyan );
+				return null;
+			} else {
+				console.log("Child '" + child.title.inverse.yellow + "' met compreshThresh requirement of " + ( levelCompreshThresh + "%" ).inverse.cyan);
+				return new WikiTree({
+					name : child.title,
+					context : child.linkText,
+					article : createArticleSummary(childArticle, childWikiLinks),
+					children : childWikiLinks
+				}, this.level + 1 );
+			}
+		
+		};
+
+		WikiTree.prototype.descend = function() {
+			// Descend to the next level ... Meaning find the children of the current children (If there are any)
+			if (!this.children) {
+				print( ("Leaf at " + this.name ).underline.yellow );
+				return;
+			}
+
+			for (var i = 0; i < this.children.length; i++) {
+				print( "Doing Descend for \""+this.name + "\" at child \"" + ( this.children[i].title || "( no title )" ) +'"' );
+				if ( this.children[i].title.indexOf(":") != -1 ) {
+					print("Found ':' at " + i + " in " + this.children[i].title);
+					this.children.splice(i,1);
+					i--;
+				} else {
+					this.children[i] = this.searchChild(this.children[i]);
+					if (this.children[i] == null) {
+						this.children.splice(i,1);
+						i--;
+					};
+				}
+			};
+			
+			print( ( "Done With Descend For " + this.name).underline.magenta );
+		
+		};
+
+		this.descend();
+		delete this.level;
+	};
+
+	var zenTree = new WikiTree({
+		name : 'Zen & The Art of Motorcycle Maintenance',
+		article : result,
+		children : zenLinks
+	}, 0);
+
+	data = zenTree;
+
+	fs.writeFile("wikitree.json", JSON.stringify(data,null,'\t'), function (err) {
+	    if(err) {
+	        print(err);
+	    } else {
+	        print("wikitree.json was saved!".green);
+	    }
+	    res.json(data);
 	});
 };
-
+/*
 fs.readFile("wikitree.js",function(err, jsonFile) {
 	if (err) {
-		exports.generateData();
+		print(err);
 	} else {
 		data = JSON.parse(jsonFile);
 	}
 });
+*/

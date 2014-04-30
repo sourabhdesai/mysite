@@ -46,4 +46,5 @@ function routeMPs() {
 	app.get('/cs398vl/mp/:num/data', mprouter.getMPData);
 	app.get('/cs398vl/notes', mprouter.renderNotes);
 	app.get('/cs398vl/finalproject/wikitree.json', mprouter.getFinalProjectData);
+	app.get('/cs398vl/finalproject/generate', mprouter.generateFinalProjectData);
 }

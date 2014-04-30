@@ -12,10 +12,12 @@
     "hashes": "~0.1.2",
     "wordpos": "~0.1.9",
     "WNdb": "~3.1.1",
-    "wait.for": "~0.6.3",
+    "wait.for": "~0.6.4",
     "ejs": "~0.8.5",
     "wikipedia-js": "0.0.6",
     "wikifetch": "0.0.1",
-    "async": "~0.7.0"
+    "async": "~0.7.0",
+    "hashtable": "~0.1.4",
+    "colors": "~0.6.2"
   }
 }

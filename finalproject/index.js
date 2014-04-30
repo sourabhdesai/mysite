@@ -1,7 +1,7 @@
 var wikitree = require('./wikitree.js');
 
 exports.getData = function(req,res) {
-	res.json( wikitree.getData() );
+	wikitree.getData(res.json);
 };
 
 exports.render = function(req, res) {
@@ -9,3 +9,10 @@ exports.render = function(req, res) {
 		message : "Need to Implement!"
 	});
 };
+
+exports.generateData = function(req,res) {
+	wikitree.wait = exports.wait;
+	wikitree.generateData(req,res);
+};
+
+exports.wait = null;

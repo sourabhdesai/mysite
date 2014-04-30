@@ -3,6 +3,9 @@ var mp2          = require('../mp2');
 var mp3          = require('../mp3');
 var notes        = require('../notes');
 var finalproject = require('../finalproject');
+var wait         = require('wait.for');
+
+finalproject.wait = wait;
 
 
 exports.renderMP = function (req,res) {
@@ -38,6 +41,10 @@ exports.getMPData = function(req,res) {
 
 exports.getFinalProjectData = function(req,res) {
 	finalproject.getData(req,res);
+};
+
+exports.generateFinalProjectData = function(req, res) {
+	wait.launchFiber(finalproject.generateData, req, res);
 };
 
 exports.renderNotes = function(req, res) {
