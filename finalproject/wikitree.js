@@ -11,11 +11,11 @@ function print(x) {
 
 exports.getData = function(cb) {
 	if (data) {
-		return cb(data);
+		cb(data);
 	} else {
 		fs.readFile("wikitree.js",function(err, jsonFile) {
 			if (err) {
-				return cb(err);
+				cb(err);
 			} else {
 				data = JSON.parse(jsonFile);
 				cb(data);
