@@ -122,7 +122,7 @@ exports.generateData = function(req, res) {
 	*/
 
 	var initCompreshThresh = 10; // Compression Threshold ... articles with a compreshThresh or greater percentage of relevant links will be added. 
-	var decayFactor        = 2.25; // For optimum, try 1.75
+	var decayFactor        = 3; // For optimum, try 1.75
 	var maxCompreshThresh  = 90;
 	var maxLevel           = 3;
 
