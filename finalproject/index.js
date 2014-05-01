@@ -5,9 +5,8 @@ exports.getData = function(req,res) {
 };
 
 exports.render = function(req, res) {
-	res.json({
-		message : "Need to Implement!"
-	});
+	res.setHeader("Content-Type", "text/html");
+	res.render('finalproject.html');
 };
 
 exports.generateData = function(req,res) {

@@ -47,6 +47,10 @@ exports.generateFinalProjectData = function(req, res) {
 	wait.launchFiber(finalproject.generateData, req, res);
 };
 
+exports.renderFinalProject = function(req,res) {
+	finalproject.render(req,res);
+};
+
 exports.renderNotes = function(req, res) {
 	notes.render(req, res);
 };

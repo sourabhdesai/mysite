@@ -5,6 +5,8 @@ var data = null;
 
 exports.wait = null;
 
+
+
 function print(x) {
 	console.log(x);
 }
@@ -13,7 +15,7 @@ exports.getData = function(req,res) {
 	if (data) {
 		res.json(data);
 	} else {
-		fs.readFile("wikitree.json",function(err, jsonFile) {
+		fs.readFile("wikitree_small.json",function(err, jsonFile) {
 			if (err) {
 				res.json(err);
 			} else {
@@ -23,6 +25,14 @@ exports.getData = function(req,res) {
 		});
 	}
 };
+
+fs.readFile("wikitree_small.json",function(err, jsonFile) {
+	if (err) {
+		print(err);
+	} else {
+		data = JSON.parse(jsonFile);
+	}
+});
 
 exports.generateData = function(req, res) {
 	var wait  = exports.wait;
@@ -124,7 +134,7 @@ exports.generateData = function(req, res) {
 	var initCompreshThresh = 10; // Compression Threshold ... articles with a compreshThresh or greater percentage of relevant links will be added. 
 	var decayFactor        = 3; // For optimum, try 1.75
 	var maxCompreshThresh  = 90;
-	var maxLevel           = 3;
+	var maxLevel           = 2;
 
 
 	var WikiTree = function(node,level) {
@@ -132,6 +142,9 @@ exports.generateData = function(req, res) {
 		this.context = node.context;
 		this.text    = node.article;
 		this.level = level;
+
+		console.log(this.level);
+
 		if (this.level > maxLevel)
 			return;
 
@@ -207,10 +220,10 @@ exports.generateData = function(req, res) {
 			var levelCompreshThresh = initCompreshThresh + Math.pow(decayFactor, this.level);
 			levelCompreshThresh = Math.min(levelCompreshThresh,maxCompreshThresh);
 			if (compression < levelCompreshThresh) {
-				print("Child '" + child.title.inverse + "' didn't meet compreshThresh requirement of " + ( levelCompreshThresh + "%" ).inverse.cyan );
+				//print("Child '" + child.title.inverse + "' didn't meet compreshThresh requirement of " + ( levelCompreshThresh + "%" ).inverse.cyan );
 				return null;
 			} else {
-				print("Child '" + child.title.inverse.yellow + "' met compreshThresh requirement of " + ( levelCompreshThresh + "%" ).inverse.cyan);
+				//print("Child '" + child.title.inverse.yellow + "' met compreshThresh requirement of " + ( levelCompreshThresh + "%" ).inverse.cyan);
 				return new WikiTree({
 					name : child.title,
 					context : child.linkText,
