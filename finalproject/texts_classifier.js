@@ -155,7 +155,7 @@ exports.isRelevant = function(term) {
 	return ( zenAvg / otherAvg ) >= threshold;
 };
 
-
+/*
 console.log("Testing");
 
 console.log("Test for 'Quality'");
@@ -279,4 +279,4 @@ console.log("numberTrue : " + numberTrue);
 console.log("numIrrelWords : " + numIrrelWords);
 
 console.log("False Positive Percentage: " + ( 100 * ( numberTrue / numIrrelWords ) + "%").green );
-
+*/
