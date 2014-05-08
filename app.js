@@ -8,6 +8,7 @@ var path    = require('path');
 
 var home     = require('./landing_page');
 var mprouter = require('./mprouter');
+var cs466    = require('./cs466');
 
 var app = express();
 
@@ -47,5 +48,7 @@ function routeMPs() {
 	app.get('/cs398vl/notes', mprouter.renderNotes);
 	app.get('/cs398vl/finalproject/', mprouter.renderFinalProject);
 	app.get('/cs398vl/finalproject/wikitree.json', mprouter.getFinalProjectData);
+	app.get('/cs466/miniproject/:num', cs466.render);
+	app.get('/cs466/miniproject/:num/data', cs466.getVizData);
 	//app.get('/cs398vl/finalproject/generate', mprouter.generateFinalProjectData); // Only use to generate data using wait.for
 }
