@@ -1,8 +1,10 @@
 var fs   = require('fs');
-var runtimeData = require('./barchart_runtime.json');
+
+var runtimeData  = require('./barchart_runtime.json');
 var varianceData = require('./barchart_variance.json');
 var accuracyData = require('./barchart_accuracy.json');
 var accVsVarData = require('./barchart_accuracy_vs_variance.json');
+var accVsREData  = require('./scatterplot_accuracy_vs_re.json');
 
 exports.render = function (req, res) {
 	res.setHeader("Content-Type", "text/html");
@@ -19,6 +21,8 @@ exports.render = function (req, res) {
 		res.render("cs466graphs/miniproject4.html");
 	} else if (num == "5") {
 		res.render("cs466graphs/miniproject5.html");
+	} else if (num == "6") {
+		res.render("cs466graphs/miniproject6.html");
 	} else {
 		res.json({
 			message : "Number " + num + " Has no Page"
@@ -40,6 +44,8 @@ exports.getVizData = function (req, res) {
 		res.json(accuracyData);
 	} else if (num == "5") {
 		res.json(accVsVarData);
+	} else if (num == "6") {
+		res.json(accVsREData);
 	} else {
 		res.json({
 			message : "Number " + num + " Has no Data"

@@ -7,5 +7,5 @@ exports.getData = function() {
 
 exports.render = function(req, res) {
 	res.setHeader("Content-Type", "text/html");
-	res.render('mp1.html'); // TODO: Render the html file on the res variable
+	res.render('mp1.html');
 };
